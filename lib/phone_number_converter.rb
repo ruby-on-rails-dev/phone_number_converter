@@ -39,12 +39,25 @@ class PhoneNumberConverter
         index += pattern_element
       end
     end
-    p expression
+    scan_regex_pattern_expression expression
+  end
+
+  def dictionary
+    dictionary = File.open('../dictionary.txt', 'r').read
   end
 
   def build_regex_pattern index, pattern_element
     "^" + @phonenumber[index..(index + pattern_element - 1)].map { |c| "(#{NUMBER_LETTERS[c].join('|')})" }.join + "$"
   end
+
+  def scan_regex_pattern_expression expression
+    words = {}
+    expression.each_pair do |key, exp|
+      words[key] = dictionary.scan(Regexp.new(exp)).map(&:join)
+    end
+    p words
+  end
+
   phone_number_converter = PhoneNumberConverter.new "2282668687"
   phone_number_converter. possible_combinations
   
