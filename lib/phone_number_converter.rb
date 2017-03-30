@@ -1,4 +1,4 @@
-class PhoneNumberConverter
+class Phone_NumberConverter
 
   PATTERN = [
     [3,3,4],
@@ -23,15 +23,16 @@ class PhoneNumberConverter
     "9" => ["W", "X", "Y", "Z"]
   }
 
-  def initialize phonenumber
-    unless /\A[2-9]{10}\z/.match(phonenumber)
+  def initialize phone_number
+    unless /\A[2-9]{10}\z/.match(phone_number)
       p 'Invalid Input'
     end
-    @phonenumber = phonenumber.chars
+    @phone_number = phone_number.chars
   end
 
   def possible_combinations
     expression = {}
+    @result = []
     PATTERN.each do |pattern|
       index = 0
       pattern.each do |pattern_element|
@@ -40,6 +41,7 @@ class PhoneNumberConverter
       end
     end
     scan_regex_pattern_expression expression
+    p @result
   end
 
   def dictionary
@@ -47,7 +49,7 @@ class PhoneNumberConverter
   end
 
   def build_regex_pattern index, pattern_element
-    "^" + @phonenumber[index..(index + pattern_element - 1)].map { |c| "(#{NUMBER_LETTERS[c].join('|')})" }.join + "$"
+    "^" + @phone_number[index..(index + pattern_element - 1)].map { |c| "(#{NUMBER_LETTERS[c].join('|')})" }.join + "$"
   end
 
   def scan_regex_pattern_expression expression
@@ -55,10 +57,40 @@ class PhoneNumberConverter
     expression.each_pair do |key, exp|
       words[key] = dictionary.scan(Regexp.new(exp)).map(&:join)
     end
-    p words
+    computing_patterns words
   end
 
-  phone_number_converter = PhoneNumberConverter.new "2282668687"
+  def computing_patterns words
+    
+    PATTERN.each do |pattern|
+      index = 0
+      is_blank = true
+      pattern.each do |element|
+        break if (is_blank = words["#{index}_#{index+element-1}"].empty?)
+        index += element
+      end
+      if !is_blank
+        computing_combinations(pattern, words)
+      end
+    end
+  end
+
+  def computing_combinations pattern, words
+    index = 0
+    words_combination = []
+    pattern.each do |pattern_element|
+      words_combination << words["#{index}_#{index+pattern_element-1}"]
+      index += pattern_element
+    end
+    if words_combination.count >1
+      products = words_combination[0].product(*words_combination[1..-1])
+    else
+      products = words_combination[0]
+    end
+    @result << products
+  end
+
+  phone_number_converter = Phone_NumberConverter.new "2282668687"
   phone_number_converter. possible_combinations
   
 end
