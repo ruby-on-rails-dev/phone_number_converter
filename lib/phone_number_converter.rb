@@ -1,5 +1,6 @@
 class PhoneNumberConverter
 
+  # Possible patterns for 10 digit number with minimum of 3 letter words.
   PATTERNS = [
     [3,3,4],
     [3,4,3],
@@ -67,14 +68,14 @@ class PhoneNumberConverter
     words
   end
 
-  # computing patterns to get words combination
+  # Computing patterns to get words combination
   # INPUT: words
   def computing_patterns words
     PATTERNS.map do |pattern|
       index = 0
       is_blank = true
       pattern.each do |element|
-        break if (is_blank = words["#{index}_#{index+element-1}"].empty?)
+        break if (is_blank = words["#{index}_#{index + element - 1}"].empty?)
         index += element
       end
       if !is_blank
@@ -83,7 +84,7 @@ class PhoneNumberConverter
     end.compact
   end
 
-  # Computting all possible combinations
+  # Computing all possible combinations
   # INPUT: pattern and words
   def computing_combinations pattern, words
     index = 0
