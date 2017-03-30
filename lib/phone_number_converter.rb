@@ -24,8 +24,11 @@ class PhoneNumberConverter
   }
 
   def initialize phonenumber
+    unless /\A[2-9]{10}\z/.match(phonenumber)
+      p 'Invalid Input'
+    end
     @phonenumber = phonenumber.chars
   end
 
-  phone_number_converter = PhoneNumberConverter.new "1282668687"
+  phone_number_converter = PhoneNumberConverter.new "2282668687"
 end
