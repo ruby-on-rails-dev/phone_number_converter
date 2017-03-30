@@ -1,4 +1,4 @@
-class Phone_NumberConverter
+class PhoneNumberConverter
 
   PATTERN = [
     [3,3,4],
@@ -22,7 +22,7 @@ class Phone_NumberConverter
     "8" => ["T", "U", "V"],
     "9" => ["W", "X", "Y", "Z"]
   }
-
+  attr_accessor :result
   def initialize phone_number
     unless /\A[2-9]{10}\z/.match(phone_number)
       p 'Invalid Input'
@@ -30,6 +30,8 @@ class Phone_NumberConverter
     @phone_number = phone_number.chars
   end
 
+  # Create regex pattern expression
+  # OUTPUT: @result
   def possible_combinations
     expression = {}
     @result = []
@@ -41,17 +43,24 @@ class Phone_NumberConverter
       end
     end
     scan_regex_pattern_expression expression
-    p @result
+    @result
   end
 
+  private
+  # Read the dictionary file
   def dictionary
-    dictionary = File.open('../dictionary.txt', 'r').read
+    dictionary = File.open('dictionary.txt', 'r').read
   end
 
+  # Buiding a regex pattern
+  # INPUT: index and pattern_element from possible_combinations method
+  # OUTPUT: Phone number in the form of regex.
   def build_regex_pattern index, pattern_element
     "^" + @phone_number[index..(index + pattern_element - 1)].map { |c| "(#{NUMBER_LETTERS[c].join('|')})" }.join + "$"
   end
 
+  # Scan regex pattern expression
+  # INPUT: expression
   def scan_regex_pattern_expression expression
     words = {}
     expression.each_pair do |key, exp|
@@ -60,6 +69,8 @@ class Phone_NumberConverter
     computing_patterns words
   end
 
+  # computing patterns to get words combination
+  # INPUT: words
   def computing_patterns words
     
     PATTERN.each do |pattern|
@@ -75,6 +86,8 @@ class Phone_NumberConverter
     end
   end
 
+  # Computting all possible combinations
+  # INPUT: pattern and words
   def computing_combinations pattern, words
     index = 0
     words_combination = []
@@ -89,8 +102,4 @@ class Phone_NumberConverter
     end
     @result << products
   end
-
-  phone_number_converter = Phone_NumberConverter.new "2282668687"
-  phone_number_converter. possible_combinations
-  
 end
