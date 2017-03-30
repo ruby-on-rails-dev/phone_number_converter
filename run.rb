@@ -10,5 +10,9 @@ else
   input = "2282668687"
 end
 
-phone_number_converter = PhoneNumberConverter.new input
-puts phone_number_converter.possible_combinations.map(&:to_s)
+begin
+  phone_number_converter = PhoneNumberConverter.new input
+  puts phone_number_converter.possible_combinations.map(&:to_s)
+rescue ArgumentError
+  puts "Please enter valid ten digit numbers."
+end
