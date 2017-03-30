@@ -30,5 +30,22 @@ class PhoneNumberConverter
     @phonenumber = phonenumber.chars
   end
 
+  def possible_combinations
+    expression = {}
+    PATTERN.each do |pattern|
+      index = 0
+      pattern.each do |pattern_element|
+        expression["#{index}_#{index + pattern_element - 1}"] = build_regex_pattern(index, pattern_element)
+        index += pattern_element
+      end
+    end
+    p expression
+  end
+
+  def build_regex_pattern index, pattern_element
+    "^" + @phonenumber[index..(index + pattern_element - 1)].map { |c| "(#{NUMBER_LETTERS[c].join('|')})" }.join + "$"
+  end
   phone_number_converter = PhoneNumberConverter.new "2282668687"
+  phone_number_converter. possible_combinations
+  
 end
